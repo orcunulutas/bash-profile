@@ -1,22 +1,15 @@
-# 🧿 Bash Profile – Minimal, Safe, Opinionated
+#!/usr/bin/env bash
+set -e
 
-A carefully designed Bash profile focused on:
+TARGET="$HOME/.bashrc"
 
-- Visual clarity (separator, icons)
-- Safety (root awareness, history discipline)
-- Productivity (smart history, colors, sane defaults)
+echo "[+] Backing up existing .bashrc"
+[ -f "$TARGET" ] && cp "$TARGET" "$TARGET.bak.$(date +%s)"
 
-## ✨ Features
+echo "[+] Installing custom bashrc"
+curl -fsSL https://raw.githubusercontent.com/<USERNAME>/<REPO>/main/bashrc >> "$TARGET"
 
-- 🧿 User / ⚡ Root visual distinction
-- Amber separator between command outputs
-- Timestamped command history
-- Smart history navigation (↑ / ↓)
-- Clean grep / less color handling
-- Python virtualenv prompt isolation
-- SSH awareness
+echo "[+] Reloading bashrc"
+source "$TARGET"
 
-## 📦 Installation
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/<USERNAME>/<REPO>/main/install.sh | bash
+echo "[✓] Done"
