@@ -102,15 +102,32 @@ fi
 
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  [%w]"
+export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S "
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # Aynı anda açık terminaller history çakışmasın
 shopt -s histappend
-PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+#PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
 
 # Boş komutları yazma
 export HISTCONTROL=ignoreboth
+
+__hist_with_pwd() {
+  local last_cmd
+  last_cmd=$(HISTTIMEFORMAT= history 1 | sed 's/^ *[0-9]\+ *//')
+
+  # Bash'in otomatik eklediği son satırı sil
+  history -d $(history 1 | awk '{print $1}') 2>/dev/null
+
+  # PWD ile tekrar ekle
+  history -s "[$PWD] $last_cmd"
+
+  history -a
+}
+
+export PROMPT_COMMAND="__hist_with_pwd"
+
+
 
 # some more ls aliases
 alias ll='ls -alF'
